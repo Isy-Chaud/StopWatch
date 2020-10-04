@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import StartingScreen from './components/startingScreen';
 import Header from './components/Header.js';
@@ -14,13 +14,12 @@ export default function App() {
   const [ selectedHour, setSelectedHour ] = useState(0);
   const [ selectedMin, setSelectedMin ] = useState(0);
   const [ selectedSecond, setSelectedSecond ] = useState(0);
+  const [ workout, setWorkout ] = useState('WORKOUT NAME');
+  const [ reset, setReset ] = useState(false);
+  // console.log(reset, 'update');
 
+  const timerHandler = (selectedHour, selectedMin, selectedSecond, value ) =>{
 
-
-
-  const timerHandler = (selectedHour, selectedMin, selectedSecond) =>{
-
-    console.log(selectedHour, selectedMin, selectedSecond);
 
       let Timer = (config) => {
        let {h,m,s} = config;
@@ -37,6 +36,10 @@ export default function App() {
         setSelectedHour(TimeFormat(hours));
         setSelectedMin(TimeFormat(minutes));
         setSelectedSecond(TimeFormat(seconds));
+        setWorkout(value);
+
+        // console.log( seconds);
+
 
       //checks client config
       if(h&&m&&s){
@@ -91,7 +94,6 @@ export default function App() {
         // return Timer(config);
 
       }
-      //Timer
 
       Timer({h:selectedHour, m:selectedMin, s:selectedSecond})
 
@@ -104,17 +106,49 @@ export default function App() {
 
 let content = <StartingScreen startTimer={timerHandler}/>;
 
+const newTimerHandler = ()=>{
+  // setSelectedHour(false);
+  // setSelectedMin(false);
+  setSelectedSecond(0);
+  // setWorkout('WORKOUT NAME');
+  // console.log(selectedSecond);
+  setReset(false);
 
-
-
-
-if(selectedHour || selectedMin || selectedSecond){
-  content = <TimerScreen hour={selectedHour} minute={selectedMin} second={selectedSecond}/>;
+}
+const restartTimer = () =>{
+    setReset(true)
+    timerHandler( selectedHour, selectedMin, selectedSecond, workout );
 
 }
 
 
 
+if(selectedHour  || selectedMin  || selectedSecond == true || workout  ){
+  content = <TimerScreen
+                    hour={selectedHour}
+                    minute={selectedMin}
+                    second={selectedSecond}
+                    workout={workout}
+                    reset={restartTimer}
+                    newTimer={newTimerHandler}
+                    />;
+}
+
+if(reset === true){
+  // console.log('step a time');
+  content = <TimerScreen
+                    hour={selectedHour}
+                    minute={selectedMin}
+                    second={selectedSecond}
+                    workout={workout}
+                    reset={restartTimer}
+                    newTimer={newTimerHandler}
+                    />;
+}
+
+if(selectedSecond === 0 ) {
+  content = <StartingScreen startTimer={timerHandler} />
+}
 
 
 
@@ -139,7 +173,6 @@ if(selectedHour || selectedMin || selectedSecond){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#000000',
     color:"#ff6347"
 
   },

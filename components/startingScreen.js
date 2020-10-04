@@ -23,15 +23,11 @@ const StartingScreen = (props) =>{
   const [ selectedHour, setSelectedHour ] = useState(0);
   const [ selectedMin, setSelectedMin ] = useState(0);
   const [ selectedSecond, setSelectedSecond ] = useState(0);
-
-
+  const [ value, setValue ] = useState('WORKOUT NAME');
 
   return (
     <View style={styles.screen}>
-
-
-    <Input />
-
+    <Input  value={value} onChangeText={(itemValue) => setValue(itemValue)}/>
     <View style={styles.text}>
     <Text style={styles.color}>SET TIME</Text>
 
@@ -81,7 +77,9 @@ const StartingScreen = (props) =>{
           </Picker>
       </View>
       <View style={styles.button}>
-      <Button title="start" onPress={()=>props.startTimer(selectedHour, selectedMin, selectedSecond)} />
+
+      <Button title="start" onPress={()=>props.startTimer(selectedHour, selectedMin, selectedSecond, value )} />
+    
       </View>
     </View>
 
@@ -101,8 +99,6 @@ const styles=StyleSheet.create({
      flexDirection: 'row',
      justifyContent: 'center',
      marginTop: 1,
-     // height: '30%',
-     // width:
      color: '#ff6347'
    },
    picker:{
